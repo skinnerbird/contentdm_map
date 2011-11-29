@@ -1,4 +1,4 @@
 *.gem
 *.lock
-*.xls
+cdm*.xls
 *.mrc
