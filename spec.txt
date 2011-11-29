@@ -1,0 +1,65 @@
+Creator|20
+Creator Role|15
+Title|60
+Statement of Responsibility|24
+Alternative Title|40
+Place of Publication (Original)|25
+Publisher (Original)|20
+Creation/Publication Date|22
+Copyright Date|15
+Reprint Date|12
+Creation/Publication Date (clean)|20
+Creation/Publication Date (2) (clean)|20
+Object Description|60
+Biographical/Historical Note|60
+Table Of Contents |30
+Creator Note|20
+Number of Images/Parts|20
+Other Physical Details|15
+Dimensions|15
+Language|15
+Source of Title|20
+Source of Title Variations|22
+Original Creation/Publication Details|25
+Reproduction Details (physical item)|30
+Location of Originals|16
+Collection Guide|20
+Owning Institution|30
+Copyright Status|70
+Reuse and Reproduction Restrictions|30
+Immediate Source of Acquisition|25
+Provenance|15
+Physical Condition|15
+Signatures and Inscriptions|20
+Numbers or Letters on Originals|26
+Markings and Stamps|20
+Other Statements of Responsibility|22
+Source Note|15
+Local Note|15
+Subject (Person)|80
+Subject (Family)|80
+Subject (Corporate Body)|80
+Subject (Meeting/Event)|80
+Subject (Time Period)|80
+Subject (Topical)|80
+Subject (Geographic FAST)|80
+Subject (Geographic local)|80
+Street Address|40
+Location Coordinates|40
+Genre/Form|30
+Contributor (Person)|25
+Contributor (Corporate)|25
+Contributor (Conference or Meeting)|25
+Related Resource|25
+Related Resource (Uniform Title)|25
+Related Publication|25
+Collection|50
+URI|50
+Archival Disc File ID|25
+Call Number|25
+Shelving Location of Physical Item(s)|50
+Identifier|20
+Object Type|14
+OCLC#|14
+Description|40
+Unidentified notes|100
