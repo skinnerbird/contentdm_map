@@ -36,13 +36,20 @@ Markings and Stamps|20
 Other Statements of Responsibility|22
 Source Note|15
 Local Note|15
-Subject (Person)|80
-Subject (Family)|80
-Subject (Corporate Body)|80
-Subject (Meeting/Event)|80
+Geocoding status|15
+Subject (Person - LCNAF)|80
+Subject (Person - Local)|80
+Subject (Family - LCNAF)|80
+Subject (Family - Local)|80
+Subject (Corporate - LCNAF)|80
+Subject (Corporate - Local)|80
+Subject (Meeting - LCNAF)|80
+Subject (Meeting - Local)|80
 Subject (Time Period)|80
-Subject (Topical)|80
+Subject (Topical - FAST)|80
+Subject (Topical - LOCAL)|80
 Subject (Geographic FAST)|80
+Subject (Geographic LCNAF)|80
 Subject (Geographic local)|80
 Street Address|40
 Location Coordinates|40
@@ -50,16 +57,16 @@ Genre/Form|30
 Contributor (Person)|25
 Contributor (Corporate)|25
 Contributor (Conference or Meeting)|25
-Related Resource|25
-Related Resource (Uniform Title)|25
+Personal name added/Title|25
+Related Resource (Serial Title)|25
 Related Publication|25
-Collection|50
-URI|50
-Archival Disc File ID|25
-Call Number|25
+Series (controlled)|50
+Electronic access|50
+Filename (verified)|25
+Call # (without location prefix)|25
 Shelving Location of Physical Item(s)|50
-Identifier|20
+Horizon bib #|20
 Object Type|14
 OCLC#|14
-Description|40
+Digitization Note|40
 Unidentified notes|100
