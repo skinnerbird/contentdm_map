@@ -12,6 +12,15 @@ require 'spreadsheet'
 SET CRITERIA / CONSTRAINTS FOR FIELDS
 =end
 
+module MARC
+	class DataField
+		# monekey patch: space delimit subfields
+		def value
+  			return(@subfields.map {|s| s.value}.join ' ')
+		end
+	end
+end
+
 NUM_HEADERS = 72
 spec = {}
 File.open('spec.txt').each_line do |l|
@@ -54,7 +63,7 @@ MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |
 		cdm_data['Title'] = MarcTools::MarcFieldWrapper.new(record['245']).subfield_string(' ', 'c', 'h').strip
 		cdm_data['Statement of Responsibility'] = record['245']['c'] # REC MUST HAVE 245
 		cdm_data['Alternative Title'] = record.grab('246').map(&:value).join(';').strip
-		cdm_data['Place of Publication (Original)'] = record['260']['a'].gsub(/\s*\W$/, '') rescue nil
+		cdm_data['Place of Publication (Original)'] = record['260']['a'].gsub(/^\[/, '').gsub(/\s*\W$/, '') rescue nil
 		cdm_data['Publisher (Original)'] = record['260']['b'] rescue nil
 		cdm_data['Creation/Publication Date'] = record['260']['c'] rescue nil # date1 ???
 		cdm_data['Copyright Date'] = record.copyright_date
@@ -88,20 +97,20 @@ MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |
 		cdm_data['Source Note'] = record.grab_by_value('500', keywords[:source_note]).map(&:value).join(';').strip
 		cdm_data['Local Note'] = record['590'].value rescue nil
 		cdm_data['Geocoding status'] = record['598'].value rescue nil
-		cdm_data['Subject (Person - LCNAF)']    = record.find_all{|f| f.tag == '600' and f.indicator1 =~ /(0|1)/ and f.indicator2 != '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Person - Local)']    = record.find_all{|f| f.tag == '600' and f.indicator1 =~ /(0|1)/ and f.indicator2 == '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Family - LCNAF)']    = record.find_all{|f| f.tag == '600' and f.indicator1 == '3' and f.indicator2 != '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Family - Local)']    = record.find_all{|f| f.tag == '600' and f.indicator1 == '3' and f.indicator2 == '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Corporate - LCNAF)'] = record.find_all{|f| f.tag == '610' and f.indicator2 != '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Corporate - Local)'] = record.find_all{|f| f.tag == '610' and f.indicator2 == '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Meeting - LCNAF)']   = record.find_all{|f| f.tag == '611' and f.indicator2 != '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Meeting - Local)']   = record.find_all{|f| f.tag == '611' and f.indicator2 == '7'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Time Period)']       = record.grab_by_value('648', 'fast$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Topical - FAST)']    = record.grab_by_value('650', 'fast$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Topical - LOCAL)']   = record.grab_by_value('650', 'local$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Geographic FAST)']   = record.grab_by_value('651', 'fast$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Geographic LCNAF)']  = record.grab_by_value('651', 'lcnaf$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
-		cdm_data['Subject (Geographic local)']  = record.grab_by_value('651', 'local$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ').strip}.join(';').strip
+		cdm_data['Subject (Person - LCNAF)']    = record.find_all{|f| f.tag == '600' and f.indicator1 =~ /(0|1)/ and f['2'] == 'lcnaf'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Person - Local)']    = record.find_all{|f| f.tag == '600' and f.indicator1 =~ /(0|1)/ and f['2'] == 'local'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Family - LCNAF)']    = record.find_all{|f| f.tag == '600' and f.indicator1 == '3' and f['2'] == 'lcnaf'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Family - Local)']    = record.find_all{|f| f.tag == '600' and f.indicator1 == '3' and f['2'] == 'local'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Corporate - LCNAF)'] = record.grab_by_value('610', 'lcnaf$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Corporate - Local)'] = record.grab_by_value('610', 'local$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Meeting - LCNAF)']   = record.grab_by_value('611', 'lcnaf$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Meeting - Local)']   = record.grab_by_value('611', 'local$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Time Period)']       = record.grab_by_value('648', 'fast$').map{ |f|  MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Topical - FAST)']    = record.grab_by_value('650', 'fast$').map{ |f|  MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Topical - LOCAL)']   = record.grab_by_value('650', 'local$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Geographic FAST)']   = record.grab_by_value('651', 'fast$').map{ |f|  MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Geographic LCNAF)']  = record.grab_by_value('651', 'lcnaf$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Geographic local)']  = record.grab_by_value('651', 'local$').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
 		cdm_data['Street Address'] = record['939']['a'] rescue nil
 		cdm_data['Location Coordinates'] = record['938']['a'] rescue nil
 		cdm_data['Genre/Form'] = record.grab('655').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' ', '2').strip}.join(';').strip	
@@ -111,14 +120,14 @@ MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |
 		cdm_data['Personal name added/Title'] = record.find_all {|f| f.tag == '700' and f['t']}.map(&:value).join(';').strip
 		cdm_data['Related Resource (Serial Title)'] = record['730'].value rescue nil
 		cdm_data['Related Publication'] = record['787'].value rescue nil
-		cdm_data['Series (controlled)'] = record.grab('8[03]0').map(&:value).join(';').strip
+		cdm_data['Series (controlled)'] = record.grab('8[03]0').map{ |f| f.value.gsub(/;/, ':') }.join(';').strip
 		cdm_data['Electronic access'] = record.find_all {|f| f.tag == '856' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
 		cdm_data['Filename (verified)'] = record.find_all {|f| f.tag == '856' and f['3']}.map{|f| f['3'].scan(/\d+\.jpg/)}.join(';').strip
 		cdm_data['Call # (without location prefix)'] = record.find_all {|f| f.tag == '856' and f['3']}.map{|f| f['3'].split(';')[0]}.join(';').strip
 		cdm_data['Shelving Location of Physical Item(s)'] = record.grab('949').map{ |f| f['d'] }.join(';').strip
 		cdm_data['Horizon bib #'] = record['996'].value rescue nil
 		cdm_data['Object Type'] = record.type
-		cdm_data['OCLC#'] = record.oclc_number
+		cdm_data['OCLC#'] = record['001'].value rescue nil
 		cdm_data['Digitization Note'] = record.grab_by_value('500', keywords[:digitization]).map(&:value).join(';').strip
 		cdm_data['Unidentified notes'] = record.find_all {|f| f.tag == '500' and f.value !~ /#{note_string}/i}.map(&:value).join(';').strip
 
