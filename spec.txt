@@ -70,3 +70,4 @@ Object Type|14
 OCLC#|14
 Digitization Note|40
 Unidentified notes|100
+Image file status|40

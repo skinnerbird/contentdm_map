@@ -5,7 +5,7 @@ require 'spreadsheet'
 # SCL Metadata Application Profile processor
 # Generates .xls in accordance with specification
 # for import into Contentdm
-# Original: 09/19/2011, Updated: 11/28/2011
+# Original: 09/19/2011, Updated: 01/03/2012
 # Author: Mark Cooper
 
 =begin
@@ -21,7 +21,7 @@ module MARC
 	end
 end
 
-NUM_HEADERS = 72
+NUM_HEADERS = 73
 spec = {}
 File.open('spec.txt').each_line do |l|
 	header, width = l.split('|')
@@ -53,7 +53,7 @@ note_string = '(' + keywords.values.join('|') + ')'
 ASSEMBLE RECORD DATA INTO ARRAY (CDM) OF HASHES (CDM_DATA ELEMENTS)
 =end
 
-MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |r|
+MARC::ForgivingReader.new('CDM_p_numbers.mrc').each do |r|
 	num_records += 1
 	record = MarcTools::MarcRecordWrapper.new(r)
 	cdm_data = Hash.new
@@ -66,7 +66,7 @@ MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |
 		cdm_data['Place of Publication (Original)'] = record['260']['a'].gsub(/^\[/, '').gsub(/\s*\W$/, '') rescue nil
 		cdm_data['Publisher (Original)'] = record['260']['b'] rescue nil
 		cdm_data['Creation/Publication Date'] = record['260']['c'] rescue nil # date1 ???
-		cdm_data['Copyright Date'] = record.copyright_date
+		cdm_data['Copyright Date'] = record.copyright_date rescue nil
 		cdm_data['Reprint Date'] = record.dtst == 'r' ? record.date1 : ''
 		cdm_data['Creation/Publication Date (clean)'] = record.dtst == 'r' ? record.date1 : ''
 		cdm_data['Creation/Publication Date (2) (clean)'] = record.dtst == 'r' ? record.date2 : ''
@@ -122,7 +122,7 @@ MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |
 		cdm_data['Related Publication'] = record['787'].value rescue nil
 		cdm_data['Series (controlled)'] = record.grab('8[03]0').map{ |f| f.value.gsub(/;/, ':') }.join(';').strip
 		cdm_data['Electronic access'] = record.find_all {|f| f.tag == '856' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
-		cdm_data['Filename (verified)'] = record.find_all {|f| f.tag == '856' and f['3']}.map{|f| f['3'].scan(/\d+\.jpg/)}.join(';').strip
+		cdm_data['Filename (verified)'] = record.find_all {|f| f.tag == '856' and f['u']}.map{|f| f['u'].scan(/[A-Za-z]?\d+.?[A-Za-z]?\.jpg/)}.join(';').strip
 		cdm_data['Call # (without location prefix)'] = record.find_all {|f| f.tag == '856' and f['3']}.map{|f| f['3'].split(';')[0]}.join(';').strip
 		cdm_data['Shelving Location of Physical Item(s)'] = record.grab('949').map{ |f| f['d'] }.join(';').strip
 		cdm_data['Horizon bib #'] = record['996'].value rescue nil
@@ -130,6 +130,7 @@ MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |
 		cdm_data['OCLC#'] = record['001'].value rescue nil
 		cdm_data['Digitization Note'] = record.grab_by_value('500', keywords[:digitization]).map(&:value).join(';').strip
 		cdm_data['Unidentified notes'] = record.find_all {|f| f.tag == '500' and f.value !~ /#{note_string}/i}.map(&:value).join(';').strip
+		cdm_data['Image file status'] = record['909'].value rescue nil
 
 		cdm_data.each { |k, v| cdm_data[k] = ' ' if v.nil? or v.empty? }
 		raise "Consistency error: keys are not equal." unless cdm_data.keys == spec.keys
@@ -140,7 +141,7 @@ MARC::ForgivingReader.new('PhotoRecordConversions_CDM_ready_TEST.mrc').each do |
 end
 
 puts "RECORDS READ: " + num_records.to_s
-cdm.sort_by! { |cdm_data| cdm_data[:title] }
+cdm.sort_by! { |cdm_data| cdm_data['Title'] }
 
 =begin
 CREATE THE SPREADSHEET
@@ -160,5 +161,7 @@ transform.name = 'transform'
 transform.row(0).concat spec.keys
 transform.row(0).default_format = Spreadsheet::Format.new(format)
 (0..spec.keys.size - 1).each { |i| transform.column(i).width = spec.values[i] }
-cdm.each_with_index { |h, idx| idx += 1; transform.row(idx).replace(h.values) }
+cdm.each_with_index { |h, idx| idx += 1; transform.row(idx).replace(h.values.map { |v| v.encode('UTF-8') }) }
 book.write "cdm-#{Time.now.strftime('%Y%m%d')}.xls"
+
+# worksheet.row(idx + 1).replace attributes.map{ |v| v.encode('UTF-8') }
