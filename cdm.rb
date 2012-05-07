@@ -21,6 +21,7 @@ module MARC
 	end
 end
 
+input_file = 'CDM_p_numbers.mrc'
 NUM_HEADERS = 73
 spec = {}
 File.open('spec.txt').each_line do |l|
@@ -53,7 +54,7 @@ note_string = '(' + keywords.values.join('|') + ')'
 ASSEMBLE RECORD DATA INTO ARRAY (CDM) OF HASHES (CDM_DATA ELEMENTS)
 =end
 
-MARC::ForgivingReader.new('CDM_p_numbers.mrc').each do |r|
+MARC::ForgivingReader.new(input_file).each do |r|
 	num_records += 1
 	record = MarcTools::MarcRecordWrapper.new(r)
 	cdm_data = Hash.new
