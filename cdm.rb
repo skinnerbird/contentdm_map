@@ -83,7 +83,7 @@ MARC::ForgivingReader.new(input_file).each do |r|
 		cdm_data['Dimensions'] = record['300']['c'] rescue nil
 		cdm_data['Language'] = record.grab('041').map(&:subfields).join(';').strip # TEST
 		cdm_data['Sonoma Heritage Collections Theme'] = 'INPUT' # TEMPLATE
-		cdm_data['Subject (Person)']    = record.find_all{|f| f.tag == '600' and f.indicator1 =~ /(0|1)/'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
+		cdm_data['Subject (Person)']    = record.find_all{|f| f.tag == '600' and f.indicator1 =~ '/(0|1)/'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
 		cdm_data['Subject (Family)']    = record.find_all{|f| f.tag == '600' and f.indicator1 == '3'}.map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
 		cdm_data['Subject (Corporate Body)'] = record.grab_by_value('610').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
 		cdm_data['Subject (Meeting or Event)']   = record.grab_by_value('611').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' -- ', '2').gsub(/ -- $/, '')}.join(';').strip
@@ -116,7 +116,7 @@ MARC::ForgivingReader.new(input_file).each do |r|
 		cdm_data['Related Publication (Web)''] = record.find_all {|f| f.tag == '856'  and f.indicator1 =~ /(2)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
 		cdm_data['Map Scale'] = record['034'].value rescue nil
 		cdm_data['Collection Name'] = record.grab('8[03]0').map{ |f| f.value.gsub(/;/, ':') }.join(';').strip
-		cdm_data['URI'] = record.find_all {|f| f.tag == '856' and f.indicator1 =~ /(0|1)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
+		cdm_data['URI'] = record.find_all {|f| f.tag == '856' and f.indicator1 =~ '/(0|1)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
 		cdm_data['Collection Guide'] = 'SUPPLIED' # TEMPLATE
 		cdm_data['Full Fext'] = '' # TEMPLATE
 		cdm_data['CONTENTdm Collection Name'] = 'SUPPLIED' # TEMPLATE
