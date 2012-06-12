@@ -22,7 +22,7 @@ module MARC
 end
 
 input_file = 'CDM_MARC_conv.mrc'
-NUM_HEADERS = 92
+NUM_HEADERS = 94
 spec = {}
 File.open('spec.txt').each_line do |l|
 	header, width = l.split('|')
@@ -67,6 +67,8 @@ MARC::ForgivingReader.new(input_file).each do |r|
 		cdm_data['Contributor (Person)'] = record.grab('700').map{ |f| MarcTools::MarcFieldWrapper.new(f).subfield_string(' ', 'e', 't').strip}.join(';').strip
 		cdm_data['Contributor (Corporate)'] = record.grab('710').map(&:value).join(';').strip
 		cdm_data['Contributor (Conference or Meeting)'] = record.grab('711').map(&:value).join(';').strip
+		cdm_data['Participant or Perfomer Note'] = record['511'].value rescue nil
+		cdm_data['Creation or Production Credits Note'] = record['508'].value rescue nil
 		cdm_data['Description'] = record.grab('520').map(&:value).join(';').strip
 		cdm_data['Biographical or Historical Note'] = record['545'].value rescue nil
 		cdm_data['Date Created or Published'] = record['260']['c'] rescue nil # date1 ???
