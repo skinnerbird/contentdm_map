@@ -6,7 +6,7 @@ require 'spreadsheet'
 # Generates .xls in accordance with specification
 # for import into Contentdm
 # Original: 09/19/2011, Updated: 06/11/2012
-# Author: Mark Cooper, Modified gy: Geoffrey Skinner
+# Author: Mark Cooper, Modified by: Geoffrey Skinner
 
 =begin
 SET CRITERIA / CONSTRAINTS FOR FIELDS
