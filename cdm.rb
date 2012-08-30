@@ -110,6 +110,7 @@ MARC::ForgivingReader.new(input_file).each do |r|
 		cdm_data['Reproduction Details (Physical Items)'] = record.grab_by_value('500', keywords[:reproduction]).map(&:value).join(';').strip
 		cdm_data['Other Notes'] = record.grab_by_value('500', keywords[:other_notes]).map(&:value).join(';').strip
 		cdm_data['Unidentified notes'] = record.find_all {|f| f.tag == '500' and f.value !~ /#{note_string}/i}.map(&:value).join(';').strip
+		cdm_data['Bibliographies'] = record['510'].value rescue nil
 		cdm_data['Source Note'] = record.grab_by_value('500', keywords[:source_note]).map(&:value).join(';').strip
 		cdm_data['Physical Condition'] = record.grab_by_value('500', keywords[:condition]).map(&:value).join(';').strip
 		cdm_data['Referenced By'] = record.find_all {|f| f.tag == '700' and f['t']}.map(&:value).join(';').strip
