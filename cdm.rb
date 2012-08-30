@@ -22,7 +22,7 @@ module MARC
 end
 
 input_file = 'CDM_input.mrc'
-NUM_HEADERS = 94
+NUM_HEADERS = 95
 spec = {}
 File.open('spec.txt').each_line do |l|
 	header, width = l.split('|')
@@ -116,10 +116,10 @@ MARC::ForgivingReader.new(input_file).each do |r|
 		cdm_data['Referenced By'] = record.find_all {|f| f.tag == '700' and f['t']}.map(&:value).join(';').strip
 		cdm_data['Related Periodical, Etc.'] = record['730'].value rescue nil
 		cdm_data['Related Publication (Book)'] = record['787'].value rescue nil
-		cdm_data['Related Publication (Web)'] = record.find_all {|f| f.tag == '856'  and f.indicator1 =~ '/(2)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
+		cdm_data['Related Publication (Web)'] = record.find_all {|f| f.tag == '856'  and f.indicator2 =~ '/(2)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
 		cdm_data['Map Scale'] = record['034'].value rescue nil
 		cdm_data['Collection Name'] = record.grab('8[03]0').map{ |f| f.value.gsub(/;/, ':') }.join(';').strip
-		cdm_data['URI'] = record.find_all {|f| f.tag == '856' and f.indicator1 =~ '/(0|1)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
+		cdm_data['URI'] = record.find_all {|f| f.tag == '856' and f.indicator2 =~ '/(0|1)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
 		cdm_data['Collection Guide'] = 'SUPPLIED' # TEMPLATE
 		cdm_data['Full Text'] = '' # TEMPLATE
 		cdm_data['CONTENTdm Collection Name'] = 'SUPPLIED' # TEMPLATE
@@ -213,7 +213,7 @@ module MARC
 end
 
 input_file = 'CDM_MARC_conv.mrc'
-NUM_HEADERS = 94
+NUM_HEADERS = 95
 spec = {}
 File.open('spec.txt').each_line do |l|
 	header, width = l.split('|')
@@ -306,12 +306,12 @@ MARC::ForgivingReader.new(input_file).each do |r|
 		cdm_data['Referenced By'] = record.find_all {|f| f.tag == '700' and f['t']}.map(&:value).join(';').strip
 		cdm_data['Related Periodical, Etc.'] = record['730'].value rescue nil
 		cdm_data['Related Publication (Book)'] = record['787'].value rescue nil
-		cdm_data['Related Publication (Web)''] = record.find_all {|f| f.tag == '856'  and f.indicator1 =~ /(2)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
+		cdm_data['Related Publication (Web)'] = record.find_all {|f| f.tag == '856'  and f.indicator2 =~ '/(2)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
 		cdm_data['Map Scale'] = record['034'].value rescue nil
 		cdm_data['Collection Name'] = record.grab('8[03]0').map{ |f| f.value.gsub(/;/, ':') }.join(';').strip
-		cdm_data['URI'] = record.find_all {|f| f.tag == '856' and f.indicator1 =~ '/(0|1)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
+		cdm_data['URI'] = record.find_all {|f| f.tag = '856' and f.indicator2 =~ '/(0|1)/' and f['u'] !~ /\.jpg/}.map{|f| f['u']}.join(';').strip
 		cdm_data['Collection Guide'] = 'SUPPLIED' # TEMPLATE
-		cdm_data['Full Fext'] = '' # TEMPLATE
+		cdm_data['Full Text'] = '' # TEMPLATE
 		cdm_data['CONTENTdm Collection Name'] = 'SUPPLIED' # TEMPLATE
 		cdm_data['Contributing Organization'] = record.grab_by_value('500', keywords[:ownership]).map(&:value).join(';').strip
 		cdm_data['Rights Management'] = record['540']['a'] rescue nil
@@ -321,7 +321,7 @@ MARC::ForgivingReader.new(input_file).each do |r|
 		cdm_data['Local System Identifier'] = record['996'].value rescue nil
 		cdm_data['SCH Identifier'] = 'SUPPLIED' # TEMPLATE
 #		cdm_data['Item Call Number'] = record.find_all {|f| f.tag == '856' and f['3']}.map{|f| f['3'].split(';')[0]}.join(';').strip
-		cdm_data['Item Call Number'] = = record.grab('949').map{ |f| f['m'] }.join(';').strip
+		cdm_data['Item Call Number'] = record.grab('949').map{ |f| f['m'] }.join(';').strip
 		cdm_data['Housing Loc of Physical Item(s)'] = record.grab('949').map{ |f| f['d'] }.join(';').strip
 		cdm_data['Location of Originals'] = record['535'].value rescue nil
 		cdm_data['Immediate Source of Acquisition'] = record['541'].value rescue nil
