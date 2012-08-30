@@ -1,4 +1,97 @@
-Creator|20
+Title|60
+Statement of Responsibility|25
+Creator|40
+Other Titles|60
+Contributor (Person)|40
+Contributor (Corporate)|35
+Contributor (Conference or Meeting)|35
+Participant or Perfomer Note|25
+Creation or Production Credits Note|25
+Description|50
+Biographical or Historical Note|45
+Date Created or Published|15
+Date Reprinted|15
+Date Created or Published (clean -- 1)|15
+Date Created or Published (clean -- 2)|15
+Publisher location (Original)|25
+Publisher (Original)|25
+Table Of Contents |25
+Item Type (Original)|25
+Item Physical Format or Genre|25
+Number of Parts or Pages|25
+Other Physical Details|25
+Dimensions|25
+Language|25
+Sonoma Heritage Collections Theme|25
+Subject (Person)|25
+Subject (Family)|25
+Subject (Corporate Body)|25
+Subject (Meeting or Event)|25
+Subject (Title)|25
+Subject (Time Period)|25
+Subject (Topical - FAST)|25
+Subject (Geographic Feature)|25
+City or Town|25
+District|25
+California County|25
+State or Province|25
+Country|25
+Geographic Metadata Source|25
+Street Address|25
+Geolocation|25
+Geocoding Status|25
+Map Zoom Level|25
+Creator Note|25
+Source of Title|25
+Source of Title Variations|25
+Original Creation or Publication Details|25
+Reproduction Details (Physical Items)|25
+Other Notes|25
+Unidentified notes|25
+Source Note|25
+Physical Condition|25
+Referenced By|25
+Related Periodical, Etc.|25
+Related Publication (Book)|25
+Related Publication (Web)|25
+Map Scale|25
+Collection Name|25
+URI|25
+Collection Guide|25
+Full Text|25
+CONTENTdm Collection Name|25
+Contributing Organization|25
+Rights Management|25
+Copyright Date|25
+Project Affiliation|25
+Fiscal Sponsor|25
+Local System Identifier|25
+SCH Identifier|25
+Item Call Number|25
+Housing Loc of Physical Item(s)|25
+Location of Originals|25
+Immediate Source of Acquisition|25
+Provenance|25
+Internal Note|25
+Digitization Note|25
+Digitizing Agency|25
+Date Digitized|25
+Item Digital Format|25
+Archival Disc File ID|25
+Master File Data Quality|25
+Master File Size|25
+Master File Format|25
+Master File Bit Depth|25
+Master File Resolution|25
+Master File Compression|25
+Master File Width|25
+Master File Height|25
+Master File Photometric Interpretation|25
+Master File Software|25
+Master File System|25
+Master File Checksum|25
+Object File Name|25
+OCLC#|25Creator|20
 Creator Role|15
 Title|60
 Statement of Responsibility|28
